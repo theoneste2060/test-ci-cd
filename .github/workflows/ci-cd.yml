@@ -23,4 +23,4 @@ jobs:
         run: mvn clean package
 
       - name: Start Spring Boot Application
-        run: java -jar target/your-spring-boot-app.jar
+        run: java -jar target/test-spring-boot-0.0.1-SNAPSHOT.jar
