@@ -5,29 +5,73 @@
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
-
-name: Java CI with Maven
+name: Java CI/CD with Maven, Docker, and Release
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v2
       with:
         java-version: '17'
-        distribution: 'temurin'
-        cache: maven
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    
+    - name: Dockerize
+      run: |
+        docker build -t my-spring-app .
+        docker tag my-spring-app:latest my-registry/my-spring-app:latest
+      env:
+        DOCKER_BUILDKIT: 1
+
+    - name: Push Docker image
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} my-registry
+        docker push my-registry/my-spring-app:latest
+      env:
+        DOCKER_BUILDKIT: 1
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          my-spring-app.jar
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: release-artifact
+        path: my-spring-app.jar
+
+    - name: Set Release Version
+      run: echo "RELEASE_VERSION=${{ steps.create_release.outputs.version }}" >> $GITHUB_ENV
+
+    - name: Archive Release
+      run: |
+        mkdir -p release-${RELEASE_VERSION}
+        mv my-spring-app.jar release-${RELEASE_VERSION}/my-spring-app.jar
+        zip -r release-${RELEASE_VERSION}.zip release-${RELEASE_VERSION}
+      env:
+        RELEASE_VERSION: ${{ steps.create_release.outputs.version }}
+
+    - name: Upload Release Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: release-archive
+        path: release-${RELEASE_VERSION}.zip
