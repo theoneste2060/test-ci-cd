@@ -40,14 +40,14 @@ jobs:
     - name: Dockerize
       run: |
         docker build -t my-spring-app .
-        docker tag my-spring-app:latest my-registry/my-spring-app:latest
+        docker tag my-spring-app:latest theoneste61/my-spring-app:latest
       env:
         DOCKER_BUILDKIT: 1
 
     - name: Push Docker image
       run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} my-registry
-        docker push my-registry/my-spring-app:latest
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} theoneste61
+        docker push theoneste61/my-spring-app:latest
       env:
         DOCKER_BUILDKIT: 1
 
