@@ -29,13 +29,21 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+    - name: Create Git Tag
+      run: |
+        git tag -a v1.0.0 -m "Version 1.0.0"
+        git push origin v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           my-spring-app.jar
-        token: ${{ secrets.GITHUB_TOKEN }}
+        tag_name: v1.0.0  # Use the tag you created
+      token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v2
