@@ -29,20 +29,6 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Dockerize
-      run: |
-        docker build -t my-spring-app .
-        docker tag my-spring-app:latest docker.io/theoneste61/my-spring-app:latest  # Replace your-docker-registry with your actual Docker registry URL or organization
-      env:
-        DOCKER_BUILDKIT: 1
-
-    - name: Push Docker image
-      run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} docker.io/theoneste61  # Replace your-docker-registry with your actual Docker registry URL or organization
-        docker push docker.io/theoneste61/my-spring-app:latest  # Replace your-docker-registry with your actual Docker registry URL or organization
-      env:
-        DOCKER_BUILDKIT: 1
-
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
@@ -67,11 +53,3 @@ jobs:
         zip -r release-${RELEASE_VERSION}.zip release-${RELEASE_VERSION}
       env:
         RELEASE_VERSION: ${{ steps.create_release.outputs.version }}
-
-    - name: Login to Docker Registry
-      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin your-docker-registry  # Replace your-docker-registry with your actual Docker registry URL or organization
-      env:
-        DOCKER_BUILDKIT: 1
-
-
-        
