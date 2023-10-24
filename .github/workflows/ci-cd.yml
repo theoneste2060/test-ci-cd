@@ -43,7 +43,7 @@ jobs:
         files: |
           my-spring-app.jar
         tag_name: v1.0.0  # Use the tag you created
-      token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v2
