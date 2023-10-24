@@ -39,7 +39,8 @@ jobs:
         git tag -a v1.0.0 -m "Version 1.0.0"
         git push origin v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+    
 
     - name: Create Release
       id: create_release
