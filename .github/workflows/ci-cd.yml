@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Configure Git Identity
+      run: |
+        git config --global user.email "theoneste2060@gmail.com"
+        git config --global user.name "Rich@gang61"
+
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -43,7 +48,7 @@ jobs:
         files: |
           my-spring-app.jar
         tag_name: v1.0.0  # Use the tag you created
-        token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v2
