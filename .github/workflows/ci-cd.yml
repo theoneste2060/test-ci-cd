@@ -28,7 +28,7 @@ jobs:
         distribution: 'adopt'
         server-id: github
         server-username: GITHUB_ACTOR
-        server-password: ${{ secrets.GITHUB_TOKEN }}
+        server-password: ${{ secrets.G_TOKEN }}
         overwrite-settings: true
 
     - name: Build with Maven
@@ -39,7 +39,7 @@ jobs:
         git tag -a v1.0.0 -m "Version 1.0.0"
         git push origin v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.G_TOKEN }}
     
 
     - name: Create Release
@@ -49,7 +49,7 @@ jobs:
         files: |
           my-spring-app.jar
         tag_name: v1.0.0  # Use the tag you created
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.G_TOKEN }}
 
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v2
