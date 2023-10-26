@@ -33,31 +33,17 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker build -t my-spring-app .
+        docker build -t ghcr.io/${{ github.theoneste2060 }}/my-spring-app:latest .
       working-directory: ${{ github.workspace }}
 
-    - name: Login to Docker Hub
+    - name: Login to GitHub Container Registry
       run: |
-        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        echo ${{ secrets.G_TOKEN }} | docker login ghcr.io -u ${{ github.theoneste2060 }} --password-stdin
       env:
-        DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_HUB_USERNAME: ${{ github.theoneste2060 }}
 
     - name: Push Docker Image to GitHub Container Registry
       run: |
-        docker tag my-spring-app ghcr.io/${{ github.repository_owner }}/my-spring-app:latest
-        docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
-        docker push ghcr.io/${{ github.repository_owner }}/my-spring-app:latest
+        docker push ghcr.io/${{ github.theoneste2060 }}/my-spring-app:latest
       env:
-        DOCKER_HUB_USERNAME: ${{ secrets.GITHUB_ACTOR }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-      
-
-    - name: Create GitHub Release
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          my-spring-app.jar
-        tag_name: latest
-        token: ${{ secrets.GITHUB_TOKEN }}
+        DOCKER_HUB_USERNAME: ${{ github.theoneste2060 }}
