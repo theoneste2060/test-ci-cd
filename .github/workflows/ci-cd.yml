@@ -46,16 +46,7 @@ jobs:
     - name: Push Docker Image to Docker Hub
       run: |
         docker tag my-spring-app ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
-        docker push ${{ secrets.theoneste61 }}/my-spring-app:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
       env:
         DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Create GitHub Release
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          my-spring-app.jar
-        tag_name: latest
-        token: ${{ secrets.GITHUB_TOKEN }}
