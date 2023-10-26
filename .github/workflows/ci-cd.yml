@@ -38,18 +38,18 @@ jobs:
 
     - name: Login to Docker Hub
       run: |
-        echo ${{ secrets.Rich@gang61 }} | docker login -u ${{ secrets.theoneste61 }} --password-stdin
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
       env:
-        DOCKER_HUB_USERNAME: ${{ secrets.theoneste61 }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.Rich@gang61 }}
+        DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push Docker Image to Docker Hub
       run: |
-        docker tag my-spring-app ${{ secrets.theoneste61 }}/my-spring-app:latest
+        docker tag my-spring-app ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
         docker push ${{ secrets.theoneste61 }}/my-spring-app:latest
       env:
-        DOCKER_HUB_USERNAME: ${{ secrets.theoneste61 }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.Rich@gang61 }}
+        DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Create GitHub Release
       id: create_release
